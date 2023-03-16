@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body  onload="loadBD()">
+    <div id="content">
+
+    </div>
+    <h1>Ку ку</h1>
+    <a href="/">все-го хо-ро-ше-го! Русские идут домой</a>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        const socket = io()
+        function loadBD(){ 
+            
+            socket.emit("reqBD") //отправляем запрос на получение данных из бд
+        }
+        socket.on("sendBD", function(resBD){  //получаем ответ с сервера и переменную с данными
+            var siteLength = resBD.split("\n").length //считаем количество переносов строки для цикла
+            for (let i = 0; i < siteLength; i++) {  //создаём цикл генерации ссылок
+                document.getElementById("content").insertAdjacentHTML("beforeend", "<a onclick=getLink(this) id="+ resBD.split("\n")[i] + ">перейти в источник</a> <br>")  //генерируем ссылки
+            }
+        })
+        function getLink(element){  //функция отправления на сервер айди элемента, на который нажали на сервер
+            var id = element.id //записываем айди в переменную
+            socket.emit("getLink", id) //отправляем айли на сервер
+        }
+
+        socket.on("redirect", function(id){ //получаем запрос на перенаправление
+            document.location.href=id //переход на нажатую ссылку
+        })
+    </script>
+</body>
+</html>

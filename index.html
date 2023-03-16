@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="Style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>конструктор сайтов</title>
+</head>
+<body>
+    <a href="qa">Список сайтов</a>
+    <textarea id="textField"></textarea>
+    <input type="button" value="создать сайт" onclick="createSite()">
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        const socket = io()
+
+        function createSite() {     //функция создания сайта по нажатию на кнопку(ну тут всё и так понятно)
+            var textValue = document.getElementById("textField").value //это уже настолько база, что даже скучно
+            socket.emit("create", textValue) //отправляем Запрос "create" + значение текстового поля
+        }
+    </script>
+</body>
+</html>
